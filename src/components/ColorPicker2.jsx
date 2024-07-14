@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 const colors = [
   { primary: '#ffeb3b', shades: ['#fff59d', '#fff176'] }, // Yellow
@@ -7,23 +7,42 @@ const colors = [
   { primary: '#9c27b0', shades: ['#ce93d8', '#ba68c8'] }, // Purple
 ];
 
-const ColorPicker1 = () => {
+const ColorPicker2 = () => {
   const [backgroundColor, setBackgroundColor] = useState('#ffffff');
   const [hoveredColor, setHoveredColor] = useState(null);
+  const [persistedColor, setPersistedColor] = useState(null);
+  const timerRef = useRef(null);
 
   const handleColorChange = (color) => {
     setBackgroundColor(color);
     setHoveredColor(null);
+    setPersistedColor(null);
   };
 
   const handleMouseEnter = (index) => {
+    clearTimeout(timerRef.current);
     setHoveredColor(index);
   };
 
   const handleMouseLeave = (index) => {
     if (hoveredColor === index) {
-      setHoveredColor(null);
+      timerRef.current = setTimeout(() => {
+        setHoveredColor(null);
+        setPersistedColor(null);
+      }, 5000);
     }
+  };
+
+  const handlePersistedMouseLeave = () => {
+    timerRef.current = setTimeout(() => {
+      setHoveredColor(null);
+      setPersistedColor(null);
+    }, 5000);
+  };
+
+  const handlePersistedMouseEnter = (index) => {
+    clearTimeout(timerRef.current);
+    setPersistedColor(index);
   };
 
   return (
@@ -40,13 +59,15 @@ const ColorPicker1 = () => {
               onClick={() => handleColorChange(color.primary)}
               style={{ width: '50px', height: '50px', backgroundColor: color.primary, borderRadius: '50%', cursor: 'pointer' }}
             />
-            {(hoveredColor === index) && (
-              <div style={{ position: 'absolute', top: '60px', left: '50%', transform: 'translateX(-50%)' }}>
+            {(hoveredColor === index || persistedColor === index) && (
+              <div
+                onMouseEnter={() => handlePersistedMouseEnter(index)}
+                onMouseLeave={handlePersistedMouseLeave}
+                style={{ position: 'absolute', top: '60px', left: '50%', transform: 'translateX(-50%)' }}
+              >
                 {color.shades.map((shade, shadeIndex) => (
                   <div
                     key={shadeIndex}
-                    onMouseEnter={() => handleMouseEnter(index)}
-                    onMouseLeave={() => handleMouseLeave(index)}
                     onClick={() => handleColorChange(shade)}
                     style={{ width: '50px', height: '50px', backgroundColor: shade, borderRadius: '50%', cursor: 'pointer', margin: '5px 0' }}
                   />
@@ -60,4 +81,4 @@ const ColorPicker1 = () => {
   );
 };
 
-export default ColorPicker1;
+export default ColorPicker2;

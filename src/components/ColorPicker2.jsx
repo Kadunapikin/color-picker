@@ -57,19 +57,19 @@ const ColorPicker2 = () => {
           >
             <div
               onClick={() => handleColorChange(color.primary)}
-              style={{ width: '50px', height: '50px', backgroundColor: color.primary, borderRadius: '50%', cursor: 'pointer' }}
+              style={{ width: '30px', height: '30px', backgroundColor: color.primary, borderRadius: '50%', cursor: 'pointer' }}
             />
             {(hoveredColor === index || persistedColor === index) && (
               <div
                 onMouseEnter={() => handlePersistedMouseEnter(index)}
                 onMouseLeave={handlePersistedMouseLeave}
-                style={{ position: 'absolute', top: '60px', left: '50%', transform: 'translateX(-50%)' }}
+                style={{ position: 'absolute', top: '30px', left: '50%', transform: 'translateX(-50%)' }}
               >
                 {color.shades.map((shade, shadeIndex) => (
                   <div
                     key={shadeIndex}
                     onClick={() => handleColorChange(shade)}
-                    style={{ width: '50px', height: '50px', backgroundColor: shade, borderRadius: '50%', cursor: 'pointer', margin: '5px 0' }}
+                    style={{ width: '30px', height: '30px', backgroundColor: shade, borderRadius: '50%', cursor: 'pointer', margin: '5px 0' }}
                   />
                 ))}
               </div>
